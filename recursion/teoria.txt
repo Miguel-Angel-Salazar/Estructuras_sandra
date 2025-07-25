@@ -1,0 +1,2 @@
+la iteracion debe de ser la misma, ya que si hay algun cambio ya no se vuelve recursivo.
+la recursion usa el mismo proceso que las pilas la cual es lifo
