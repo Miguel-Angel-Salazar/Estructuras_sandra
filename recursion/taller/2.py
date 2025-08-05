@@ -9,7 +9,7 @@ matriz = [[1, 2, 3],
         
 def suma_impares(matriz, i=0, suma = 0):
     if i == len(matriz):
-        return 0
+        return suma
 
 
     if matriz[i][i] % 2 != 0:
