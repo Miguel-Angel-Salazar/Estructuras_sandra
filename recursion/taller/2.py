@@ -19,6 +19,6 @@ def suma_impares(matriz, i=0, suma = 0):
     if matriz[i][len(matriz) - 1 - i] % 2 != 0 and i != len(matriz) - 1 - i:
         suma += matriz[i][len(matriz) - 1 - i]
 
-    return (suma,suma_impares(matriz, i + 1))
+    return (suma_impares(matriz, i + 1,suma))
 
 print(suma_impares(matriz))
