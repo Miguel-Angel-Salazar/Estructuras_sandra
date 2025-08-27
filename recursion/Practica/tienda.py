@@ -123,7 +123,6 @@ if __name__ == "__main__":
     print(f"Accesorio: ${calculo_precio_promedio(productos, 'accesorio')}")
     print(f"Juguetes: ${calculo_precio_promedio(productos, 'juguetes')}")
     print(f"Artesania: ${calculo_precio_promedio(productos, 'artesania')}")
-#hola
 
     print("\n" + "="*40)
     print("ORDENAMIENTO ASCENDENTE")
