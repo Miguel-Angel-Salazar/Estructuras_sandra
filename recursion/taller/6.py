@@ -28,3 +28,18 @@ def generar_recomendaciones_n(productos, n, categoria=None, i=0, detener=False):
         return [producto_actual] + resto
     else:
         return generar_recomendaciones_n(productos, n, categoria, i + 1, detener)
+
+
+def generar_recomenda_limitada(productos, categoria, n, i=0, cont=0):
+    if i == len(productos) or cont == n:   # si llegamos al final o ya tenemos n productos
+        return []
+    resto = generar_recomenda_limitada(productos, categoria, n, i + 1, cont)
+    if productos[i]["categoria"].lower() == categoria.lower() and cont < n:
+        return [productos[i]] + resto
+    else:
+        return resto
+
+print("\n" + "="*40)
+print("RECOMENDACIONES LIMITADAS (Categoría: 'juguetes', max 2)")
+print("="*40)
+imprimir_lista(generar_recomenda_limitada(productos, "juguetes", 2))
