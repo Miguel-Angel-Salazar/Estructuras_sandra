@@ -41,29 +41,29 @@ class Queue:
     def size(self):
         return len(self.items)
     
-def cafeteria_v1(estudiante, sandwiches):
-    cola = Queue()
+def evaluar_postfija(s):
     pila = Stack()
-
-    for s in estudiante:
-        cola.enqueue(s)
-
-    for sand in reversed(sandwiches):
-        pila.push(sand)
-
-    rechazados = 0
-    while not cola.is_empty() and not pila.is_empty():
-        if cola.peek() == pila.peek():
-            cola.dequeue()
-            pila.pop()
-            rechazados = 0
+    for token in s:
+        if token.isdigit():
+            pila.push(int(token))
         else:
-            cola.enqueue(cola.dequeue())
-            rechazados += 1
+            segundo = pila.pop()
+            primero = pila.pop()
 
-        if rechazados == cola.size():
-            break
+            if token == '+':
+                resultado = primero + segundo
+            elif token == '-':
+                resultado = primero - segundo
+            elif token in ['x', '*']:
+                resultado = primero * segundo
+            elif token == '/':
+                resultado = primero // segundo
 
-    return cola.size()
-print(cafeteria_v1([1,1,0,0], [0,1,0,1]))
-print(cafeteria_v1([1,1,1,0,0,1], [1,0,0,0,1,1]))
+            pila.push(resultado)
+
+    return pila.pop()
+
+
+print(evaluar_postfija("25+"))
+print(evaluar_postfija("43+"))
+print(evaluar_postfija("35x83+-"))
