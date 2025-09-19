@@ -67,3 +67,22 @@ def evaluar_postfija(s):
 print(evaluar_postfija("25+"))
 print(evaluar_postfija("43+"))
 print(evaluar_postfija("35x83+-"))
+
+
+"""
+print("\n--- Resumen de espera ---")
+    n = self.atracciones.len()
+    for _ in range(n):
+        atr = self.atracciones.dequeue()
+        print(f"{atr.nombre}: {atr.visitantes.len()} en espera")
+        self.atracciones.enqueue(atr)
+"""
+
+
+"""
+def ajustar_capacidad_montana_rusa(self):
+      atr = self.atracciones.first()
+      if atr and atr.nombre == "Montaña Rusa":
+          atr.capacidad = 3 if self.turno % 2 == 1 else 2
+
+"""
