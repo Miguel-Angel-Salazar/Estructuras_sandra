@@ -1,11 +1,12 @@
 import random
 
 class Node:
-  __slots__ = ('__value','__next')
+  __slots__ = ('__value','__next','__prev')
 
   def __init__(self,value):
     self.__value = value
     self.__next = None
+    self.__prev = None
 
   def __str__(self):
     return str(self.__value)
@@ -15,10 +16,20 @@ class Node:
     return self.__next
 
   @next.setter
-  def next(self,node):
-    if node is not None and not isinstance(node,Node):
+  def next(self,newNext):
+    if newNext is not None and not isinstance(newNext,Node):
       raise TypeError("next debe ser un objeto tipo nodo ó None")
-    self.__next = node
+    self.__next = newNext
+
+  @property
+  def prev(self):
+    return self.__prev
+
+  @prev.setter
+  def prev(self,newPrev):
+    if newPrev is not None and not isinstance(newPrev,Node):
+      raise TypeError("prev debe ser un objeto tipo nodo ó None")
+    self.__prev = newPrev
 
   @property
   def value(self):
@@ -31,7 +42,7 @@ class Node:
     self.__value = newValue
 
 
-class LinkedList:
+class DoublyLinkedList:
 
   def __init__(self):
     self.__head = None
@@ -42,17 +53,35 @@ class LinkedList:
   def head(self):
     return self.__head
 
+  @head.setter
+  def head(self,newHead):
+    if newHead is not None and not isinstance(newHead,Node):
+      raise TypeError("Head debe ser un objeto tipo nodo ó None")
+    self.__head = newHead
+
   @property
   def tail(self):
     return self.__tail
+
+  @tail.setter
+  def tail(self,newTail):
+    if newTail is not None and not isinstance(newTail,Node):
+      raise TypeError("Tail debe ser un objeto tipo nodo ó None")
+    self.__tail = newTail
 
   @property
   def size(self):
     return self.__size
 
+  @size.setter
+  def size(self, newSize):
+    if not isinstance(newSize, int):
+      raise TypeError("El tamaño debe ser un objeto tipo numerico entero")
+    self.__size = newSize
+
   def __str__(self):
     result = [str(nodo.value) for nodo in self]
-    return ' --> '.join(result)
+    return ' <--> '.join(result)
 
   def print(self):
     for nodo in self:
@@ -71,9 +100,11 @@ class LinkedList:
       self.__head = newnode
       self.__tail = newnode
     else:
-      newnode.next = self.__head
+      newnode.next = self.__head #enlazo nuevo nodo
+      self.__head.prev = newnode
       self.__head = newnode
     self.__size += 1
+
 
   def append(self,value):
     newnode = Node(value)
@@ -81,7 +112,8 @@ class LinkedList:
       self.__head = newnode
       self.__tail = newnode
     else:
-      self.__tail.next = newnode
+      self.__tail.next = newnode #enlazo nuevo nodo
+      newnode.prev = self.__tail
       self.__tail = newnode
 
     self.__size += 1
@@ -104,9 +136,17 @@ class LinkedList:
       self.append(value)
     else:
       prevNode = self.getbyindex(index-1)
+      print("prevNode",prevNode)
+      nextNode = prevNode.next
+      print("nextNode",nextNode)
       newNode = Node(value)
-      newNode.next = prevNode.next
+      newNode.prev = prevNode # 1 Linea nueva por doblemente enlazada
+      newNode.next = nextNode #Enlazo el next del nuevo nodo, que es el next del previo
+
       prevNode.next = newNode
+      nextNode.prev = newNode # 2 Linea nueva por doblemente enlazada
+      print("prevNode newNode",newNode.prev)
+      print("prevNode nextNode",nextNode.prev)
       self.__size +=1
 
   def searchbyvalue(self, valuetosearch):
@@ -134,9 +174,10 @@ class LinkedList:
       self.__size = 0
     else:
       self.__head = self.__head.next
+      self.__head.prev = None
       self.__size -= 1
 
-    tempNode.next = None
+    tempNode.next = None  #limpiar la referencia al segundo nodo, ahora nueva cabeza
     return tempNode
 
 
@@ -151,71 +192,29 @@ class LinkedList:
       self.__size = 0
     else:
       poppednode = self.__tail
-      prevnode = self.getbyindex(self.__size-2)
+      prevnode = self.__tail.prev #self.getbyindex(self.__size-2)
       print("prevnode",prevnode)
       prevnode.next = None
       self.__tail = prevnode
       self.__size -= 1
+      poppednode.prev = None
       return poppednode
-#=======================================
-  def mergeNodes(self):
-      current = self.__head
-      suma = 0
-      newHead = None
-      newTail = None
 
-      while current:
-          if current.value == 0:
-              if suma > 0:
-                  current.value = suma
-                  if newHead is None:
-                      newHead = current
-                      newTail = current
-                  else:
-                      newTail.next = current
-                      newTail = current
-                  suma = 0
-          else:
-              suma += current.value
-          current = current.next
+customDLL = DoublyLinkedList()
+customDLL.prepend(10)
+customDLL.prepend(20)
+print("Despues de prepend",customDLL)
+print("prev tail",customDLL.tail.prev)
+customDLL.append(30)
+print("Despues de append",customDLL)
+print("prev tail",customDLL.tail.prev)
+customDLL.insertinindex(40,1)
+print("Despues de insert by index",customDLL)
+customDLL.append(50)
+print("Despues de append",customDLL)
+customDLL.popfirst()
+print("Despues de pop first",customDLL)
 
-      if newTail:
-          newTail.next = None
-
-      self.__head = newHead
-      self.__tail = newTail
-
-      size = 0
-      curr = newHead
-      while curr:
-          size += 1
-          curr = curr.next
-      self.__size = size
-
-ll = LinkedList()
-ll.append(0)
-ll.append(3)
-ll.append(1)
-ll.append(0)
-ll.append(4)
-ll.append(5)
-ll.append(2)
-ll.append(0)
-
-print("Antes:", ll)
-ll.mergeNodes()
-print("Después:", ll)
-
-ll = LinkedList()
-ll.append(0)
-ll.append(1)
-ll.append(0)
-ll.append(3)
-ll.append(0)
-ll.append(2)
-ll.append(2)
-ll.append(0)
-
-print("Antes:", ll)
-ll.mergeNodes()
-print("Después:", ll)
+customDLL.pop()
+print("Despues de pop",customDLL)
+print("prev tail",customDLL.tail.prev)
