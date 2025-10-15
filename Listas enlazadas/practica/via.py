@@ -58,6 +58,9 @@ class Via:
       current = nxt
 
   def simular_accidente(self):
+
+
+
     pass
 
   def invertir_via(self):
