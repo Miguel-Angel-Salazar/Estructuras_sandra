@@ -57,11 +57,54 @@ class Via:
 
       current = nxt
 
-  def simular_accidente(self):
+
+  def simular_accidente(self, placa1, placa2):
+
+    nodo1 = None
+    nodo2 = None
+    current = self.via.head
 
 
+    while current:
+        if current.value.placa == placa1:
+            nodo1 = current
+        elif current.value.placa == placa2:
+            nodo2 = current
+        current = current.next
 
-    pass
+    if nodo1 is None or nodo2 is None or nodo1 is nodo2:
+        return 0
+
+
+    primero, segundo = None, None
+    current = self.via.head
+    while current:
+        if current is nodo1:
+            primero, segundo = nodo1, nodo2
+            break
+        elif current is nodo2:
+            primero, segundo = nodo2, nodo1
+            break
+        current = current.next
+
+    if primero.next is segundo:
+        return 0
+
+    removidos = 0
+    nodo_intermedio = primero.next
+
+    while nodo_intermedio and nodo_intermedio is not segundo:
+        removidos += 1
+        nodo_intermedio = nodo_intermedio.next
+
+
+    primero.next = segundo
+    segundo.prev = primero
+
+
+    self.via.size -= removidos
+
+    return removidos
 
   def invertir_via(self):
     auto = 0
@@ -113,6 +156,7 @@ simulacion.insertar_vehiculos("CCC333", "camion", 4)
 simulacion.insertar_vehiculos("DDD444", "moto", 1)
 simulacion.insertar_vehiculos("EEE555", "auto", 2)
 simulacion.insertar_vehiculos("FFF666", "auto", 2)
+simulacion.insertar_vehiculos("GGG666", "auto", 2)
 
 print("\nvia:")
 current = simulacion.via.head
@@ -134,8 +178,10 @@ while current:
     print(current.value)
     current = current.next
 
-simulacion.simular_accidente()
-print("\nAccidente en la regional:")
+
+
+print("\nAccidente entre AAA111 y FFF666 :")
+simulacion.simular_accidente("AAA111", "FFF666")
 current = simulacion.via.head
 while current:
     print(current.value)
@@ -154,3 +200,7 @@ current = simulacion.via.head
 while current:
     print(current.value)
     current = current.next
+
+
+
+

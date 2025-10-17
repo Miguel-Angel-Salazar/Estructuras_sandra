@@ -200,21 +200,3 @@ class DoublyLinkedList:
       poppednode.prev = None
       return poppednode
 
-customDLL = DoublyLinkedList()
-customDLL.prepend(10)
-customDLL.prepend(20)
-print("Despues de prepend",customDLL)
-print("prev tail",customDLL.tail.prev)
-customDLL.append(30)
-print("Despues de append",customDLL)
-print("prev tail",customDLL.tail.prev)
-customDLL.insertinindex(40,1)
-print("Despues de insert by index",customDLL)
-customDLL.append(50)
-print("Despues de append",customDLL)
-customDLL.popfirst()
-print("Despues de pop first",customDLL)
-
-customDLL.pop()
-print("Despues de pop",customDLL)
-print("prev tail",customDLL.tail.prev)
