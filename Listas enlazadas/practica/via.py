@@ -1,21 +1,22 @@
 from clase_lista_doble import Node, DoublyLinkedList
 
 class Vehiculo:
-  def __init__(self, placa, tipo, prioridad):
+  def __init__(self, placa, tipo, prioridad, año):
     self.placa: str = placa
     self.tipo: str = tipo
     self.prioridad: int = prioridad
+    self.año: int = año
 
   def __str__(self):
-    return f"{self.placa}: {self.tipo}:{self.prioridad}"
+    return f"{self.placa}: {self.tipo}:{self.prioridad}: {self.año}"
 
 
 class Via:
   def __init__(self):
     self.via = DoublyLinkedList()
 
-  def insertar_vehiculos(self, placa, tipo, prioridad):
-    vehiculo = Vehiculo(placa, tipo, prioridad)
+  def insertar_vehiculos(self, placa, tipo, prioridad, año):
+    vehiculo = Vehiculo(placa, tipo, prioridad, año)
     self.via.append(vehiculo)
 
 
@@ -146,17 +147,40 @@ class Via:
               nxt=nxt.next
             current= current.next
 
+  def mover_antiguos_al_final(self, año_referencia=2010):
+    current = self.via.head
+    while current:
+        nxt = current.next
+        vehiculo = current.value
+
+        if vehiculo.año < año_referencia and current is self.via.head:
+            if current.next:
+                current.next.prev = current.prev
+            else:
+                self.via.tail = current.prev
+
+            if current.prev:
+                current.prev.next = current.next
+            else:
+                self.via.head = current.next
+         
+            current.prev = self.via.tail
+            current.next = None
+            self.via.tail.next = current 
+            self.via.tail = current
+
+        current = nxt
 
 
 
 simulacion = Via()
-simulacion.insertar_vehiculos("AAA111", "auto", 3)
-simulacion.insertar_vehiculos("BBB222", "moto", 1)
-simulacion.insertar_vehiculos("CCC333", "camion", 4)
-simulacion.insertar_vehiculos("DDD444", "moto", 1)
-simulacion.insertar_vehiculos("EEE555", "auto", 2)
-simulacion.insertar_vehiculos("FFF666", "auto", 2)
-simulacion.insertar_vehiculos("GGG666", "auto", 2)
+simulacion.insertar_vehiculos("AAA111", "auto", 3, 2022)
+simulacion.insertar_vehiculos("BBB222", "moto", 1, 2002)
+simulacion.insertar_vehiculos("CCC333", "camion", 4, 2011)
+simulacion.insertar_vehiculos("DDD444", "moto", 1, 2015)
+simulacion.insertar_vehiculos("EEE555", "auto", 2, 2022)
+simulacion.insertar_vehiculos("FFF666", "auto", 2, 2023)
+simulacion.insertar_vehiculos("GGG666", "auto", 2, 2012)
 
 print("\nvia:")
 current = simulacion.via.head
@@ -202,5 +226,10 @@ while current:
     current = current.next
 
 
-
+simulacion.mover_antiguos_al_final()
+print("\nCarros mas viejos:")
+current = simulacion.via.head
+while current:
+    print(current.value)
+    current = current.next
 
